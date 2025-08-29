@@ -44,7 +44,7 @@ Create a `.env` file with:
 ```
 OPENAI_API_KEY=your_openai_api_key
 MONGODB_URI=mongodb://localhost:27017
-MONGO_DATABASE=support_system
+MONGO_DATABASE=db_name
 ```
 
 ### MongoDB Setup
