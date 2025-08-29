@@ -1,0 +1,24 @@
+# Core LangGraph and workflow
+langgraph
+
+# HTTP requests and web framework
+requests
+fastapi
+uvicorn
+
+# Configuration and data handling
+pyyaml
+pydantic
+typing-extensions
+
+# OpenAI integration
+openai
+
+# MongoDB integration
+pymongo
+
+# Environment variables
+python-dotenv
+
+# Console output formatting
+rich
