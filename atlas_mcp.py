@@ -1,4 +1,4 @@
-# enhanced_atlas_mcp.py - Enhanced debug version with all required abilities
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
@@ -494,4 +494,5 @@ def test_mongodb(req: Request):
 if __name__ == "__main__":
     import uvicorn
     print("🚀 Starting Atlas MCP server on port 8002...")
+
     uvicorn.run(app, host="0.0.0.0", port=8002)
