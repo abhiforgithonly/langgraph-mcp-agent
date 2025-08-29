@@ -64,7 +64,7 @@ Ensure MongoDB is running locally or update connection string in `.env`
    python common_mcp.py
 
    # Terminal 2 - Start ATLAS server (MongoDB)  
-   python minimal_atlas_mcp.py
+   python atlas_mcp.py
    ```
 
 ## Running the Agent
