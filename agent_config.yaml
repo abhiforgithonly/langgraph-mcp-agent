@@ -1,0 +1,76 @@
+agent:
+  name: "Langie"
+  persona: |
+    You are Langie – a structured LangGraph agent.
+    You orchestrate customer-support tasks step by step.
+    You know which stages are deterministic and which are non-deterministic.
+    You persist state across the workflow and log everything.
+    You route abilities to the correct MCP server: COMMON, ATLAS, OPENAI, or MONGODB.
+
+input_schema:
+  customer_name: str
+  email: str
+  query: str
+  priority: str
+  ticket_id: str
+
+servers:
+  COMMON: "http://localhost:8001"  #  common_mcp.py
+  ATLAS: "http://localhost:8002"   #  atlas_mcp.py
+
+stages:
+  - id: INTAKE
+    mode: deterministic
+    abilities: [accept_payload]
+    server: COMMON
+
+  - id: UNDERSTAND
+    mode: deterministic
+    abilities: [parse_request_text, extract_entities, extract_intent, sentiment_analysis]
+    servers: [COMMON, ATLAS, COMMON, COMMON]
+
+  - id: PREPARE
+    mode: deterministic
+    abilities: [normalize_fields, enrich_records, add_flags_calculations, get_customer_history]
+    servers: [COMMON, ATLAS, COMMON, ATLAS]
+
+  - id: ASK
+    mode: deterministic
+    abilities: [clarify_question]
+    server: ATLAS
+
+  - id: WAIT
+    mode: deterministic
+    abilities: [extract_answer, store_answer]
+    servers: [ATLAS, COMMON]
+
+  - id: RETRIEVE
+    mode: deterministic
+    abilities: [knowledge_base_search, search_knowledge_base, store_data]
+    servers: [ATLAS, ATLAS, COMMON]
+
+  - id: DECIDE
+    mode: non-deterministic
+    abilities: [solution_evaluation, escalation_decision, update_payload]
+    servers: [COMMON, ATLAS, COMMON]
+    router_rule: "If solution_score < 90 → UPDATE; else → CREATE"
+
+  - id: UPDATE
+    mode: deterministic
+    abilities: [update_ticket, close_ticket, update_ticket_status, store_ticket]
+    servers: [ATLAS, ATLAS, ATLAS, ATLAS]
+
+  - id: CREATE
+    mode: deterministic
+    abilities: [response_generation, generate_response]
+    servers: [COMMON, COMMON]
+
+  - id: DO
+    mode: deterministic
+    abilities: [execute_api_calls, trigger_notifications, store_conversation_log]
+    servers: [ATLAS, ATLAS, ATLAS]
+
+  - id: COMPLETE
+    mode: deterministic
+    abilities: [output_payload]
+    server: COMMON
